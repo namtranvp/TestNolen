@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip clipNoMatch;
     [SerializeField] AudioClip clipWin;
     [SerializeField] AudioClip clipLose;
+    [SerializeField] AudioClip clickButton;
 
     private void Awake()
     {
@@ -25,7 +26,6 @@ public class AudioManager : MonoBehaviour
         }
 
         audioSource = GetComponent<AudioSource>();
-        PlayBackgroundMusic();
     }
 
     public void PlayBackgroundMusic()
@@ -53,5 +53,9 @@ public class AudioManager : MonoBehaviour
     public void PlayLoseSound()
     {
         audioSource.PlayOneShot(clipLose);
+    }
+    public void PlayClickButtonSound()
+    {
+        audioSource.PlayOneShot(clickButton);
     }
 }

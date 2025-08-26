@@ -35,10 +35,6 @@ public class GameManager : MonoBehaviour
     {
         currentTime = timeEndGame;
     }
-    void Start()
-    {
-
-    }
     #endregion
 
     #region Private Methods
@@ -113,16 +109,7 @@ public class GameManager : MonoBehaviour
         if (matchCount >= pairCount)
         {
             isWin = true;
-
-
-            GameSaveData data = new GameSaveData
-            {
-                numberOfCards = numberOfCards,
-                score = score
-            };
-
-            GameSave.SaveGameToFile(data);
-
+            AudioManager.instance.PlayWinSound();
             ResetGame(true);
         }
     }
@@ -130,6 +117,7 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         if (isWin) return;
+        AudioManager.instance.PlayLoseSound();
         ResetGame(false);
     }
 
@@ -141,7 +129,6 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        score = 0;
         matchCount = 0;
         selectedCards.Clear();
         currentTime = timeEndGame;
@@ -154,6 +141,14 @@ public class GameManager : MonoBehaviour
             numberOfCards += 2;
         }
 
+        GameSaveData data = new GameSaveData
+        {
+            numberOfCards = numberOfCards,
+            score = score
+        };
+
+        GameSave.SaveGameToFile(data);
+        OnTimeChanged?.Invoke((int)currentTime);
         OnReStartGame?.Invoke(_isWin);
     }
 
@@ -178,7 +173,7 @@ public class GameManager : MonoBehaviour
             OnScoreChanged?.Invoke(score);
             OnTimeChanged?.Invoke((int)currentTime);
 
-            gameStartCoroutine = StartCoroutine(GameStart());
+            OnStartGame();
         }
         else
         {
@@ -203,11 +198,13 @@ public class GameManager : MonoBehaviour
                 matchCount++;
                 OnScoreChanged?.Invoke(score);
                 isMatch = true;
+                AudioManager.instance.PlayMatchSound();
             }
             else
             {
                 Debug.Log("Not match!");
                 isMatch = false;
+                AudioManager.instance.PlayNoMatchSound();
             }
 
             StartCoroutine(WaitAndHideCards(selectedCards[0], selectedCards[1], isMatch));

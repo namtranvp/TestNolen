@@ -9,11 +9,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text buttonEndGameText;
 
     [SerializeField] GameObject panelEndGame;
-
+    [SerializeField] Button loadGameButton;
 
     void Start()
     {
         panelEndGame.SetActive(false);
+
+        loadGameButton.gameObject.SetActive(GameSave.LoadGameFromFile() != null);
     }
     private void OnEnable()
     {
@@ -42,8 +44,6 @@ public class UIManager : MonoBehaviour
     private void ShowEndGamePanel(bool isWin)
     {
         panelEndGame.SetActive(true);
-        scoreText.text = "Score: 0";
-        timeText.text = "Time: 30";
         buttonEndGameText.text = isWin ? "Next Level" : "Try Again";
     }
 }

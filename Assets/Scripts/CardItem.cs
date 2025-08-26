@@ -12,6 +12,7 @@ public class CardItem : MonoBehaviour, IPointerClickHandler
     public int Id => id;
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioManager.instance.PlayClickButtonSound();
         if (!gameManager.IsStarted)
             return;
 
