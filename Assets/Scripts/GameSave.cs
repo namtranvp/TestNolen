@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class GameSaveData
 {
-    public int numberOfCards;
+    public int levelCurrent;
     public int score;
 }
 public class GameSave : MonoBehaviour

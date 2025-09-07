@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip clipWin;
     [SerializeField] AudioClip clipLose;
     [SerializeField] AudioClip clickButton;
+    [SerializeField] AudioClip shuffleSound;
 
     private void Awake()
     {
@@ -28,21 +29,26 @@ public class AudioManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void OnEnable()
+    {
+        GameController.OnMatch += PlayMatchSound;
+    }
+
+    void OnDisable()
+    {
+        GameController.OnMatch -= PlayMatchSound;
+    }
+
+    private void PlayMatchSound(bool isMatch)
+    {
+        audioSource.PlayOneShot(isMatch ? clipMatch : clipNoMatch);
+    }
+
     public void PlayBackgroundMusic()
     {
         audioSource.clip = clipBackground;
         audioSource.loop = true;
         audioSource.Play();
-    }
-
-    public void PlayMatchSound()
-    {
-        audioSource.PlayOneShot(clipMatch);
-    }
-
-    public void PlayNoMatchSound()
-    {
-        audioSource.PlayOneShot(clipNoMatch);
     }
 
     public void PlayWinSound()
@@ -52,10 +58,16 @@ public class AudioManager : MonoBehaviour
 
     public void PlayLoseSound()
     {
+        Debug.Log("Play Lose Sound");
         audioSource.PlayOneShot(clipLose);
     }
     public void PlayClickButtonSound()
     {
         audioSource.PlayOneShot(clickButton);
+    }
+
+    public void PlayShuffleSound()
+    {
+        audioSource.PlayOneShot(shuffleSound);
     }
 }
